@@ -1,0 +1,21 @@
+diff -r 06e86780caee AudioUnits/AUPublic/AUCarbonViewBase/AUCarbonViewBase.cpp
+--- a/AudioUnits/AUPublic/AUCarbonViewBase/AUCarbonViewBase.cpp	Thu Jan 31 18:44:46 2013 -0500
++++ b/AudioUnits/AUPublic/AUCarbonViewBase/AUCarbonViewBase.cpp	Thu Jan 31 18:50:59 2013 -0500
+@@ -166,7 +166,7 @@
+ 	mBottomRight.h = mBottomRight.v = 0;
+ 	
+ 	SizeControl(mCarbonPane, 0, 0);
+-	if (err = CreateUI(mXOffset, mYOffset))
++	if ((err = CreateUI(mXOffset, mYOffset)))
+ 		return err;
+ 
+ 	// we should only resize the control if a subclass has embedded
+@@ -260,7 +260,7 @@
+ 					/*	<--	kEventParamImageSize (out, typeHISize)
+ 					 *		On exit, contains the size of the entire scrollable view.
+ 					 */
+-					HISize originalSize = { mBottomRight.h, mBottomRight.v };
++					HISize originalSize = { static_cast<CGFloat>(mBottomRight.h), static_cast<CGFloat>(mBottomRight.v) };
+ 					verify_noerr(SetEventParameter(event, kEventParamImageSize, typeHISize, sizeof(HISize), &originalSize));
+ 					
+ 					// [2/4]

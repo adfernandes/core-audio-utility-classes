@@ -1,0 +1,33 @@
+diff -uNr CoreAudio/AudioUnits/AUPublic/AUCarbonViewBase/AUCarbonViewBase.cpp CoreAudio/AudioUnits/AUPublic/AUCarbonViewBase/AUCarbonViewBase.cpp
+--- CoreAudio/AudioUnits/AUPublic/AUCarbonViewBase/AUCarbonViewBase.cpp	2012-06-26 18:24:03.000000000 -0400
++++ CoreAudio/AudioUnits/AUPublic/AUCarbonViewBase/AUCarbonViewBase.cpp	2012-09-17 17:09:25.000000000 -0400
+@@ -166,7 +166,7 @@
+ 	mBottomRight.h = mBottomRight.v = 0;
+
+ 	SizeControl(mCarbonPane, 0, 0);
+-	if (err = CreateUI(mXOffset, mYOffset))
++	if ((err = CreateUI(mXOffset, mYOffset)))
+ 		return err;
+
+ 	// we should only resize the control if a subclass has embedded
+@@ -260,7 +260,7 @@
+ 					/*	<--	kEventParamImageSize (out, typeHISize)
+ 					 *		On exit, contains the size of the entire scrollable view.
+ 					 */
+-					HISize originalSize = { mBottomRight.h, mBottomRight.v };
++					HISize originalSize = { static_cast<CGFloat>(mBottomRight.h), static_cast<CGFloat>(mBottomRight.v) };
+ 					verify_noerr(SetEventParameter(event, kEventParamImageSize, typeHISize, sizeof(HISize), &originalSize));
+
+ 					// [2/4]
+diff -uNr CoreAudio/AudioUnits/AUPublic/OtherBases/AUMIDIEffectBase.cpp CoreAudio/AudioUnits/AUPublic/OtherBases/AUMIDIEffectBase.cpp
+--- CoreAudio/AudioUnits/AUPublic/OtherBases/AUMIDIEffectBase.cpp	2012-06-26 18:24:03.000000000 -0400
++++ CoreAudio/AudioUnits/AUPublic/OtherBases/AUMIDIEffectBase.cpp	2012-09-26 14:09:57.000000000 -0400
+@@ -157,7 +157,7 @@
+ 	try {
+ 		AUMIDIEffectBase *This = static_cast<AUMIDIEffectBase *>(inComponentStorage);
+ 		if (This == NULL) return paramErr;
+-		result = This->MIDIEvent(inStatus, inData1, inData2, inOffsetSampleFrame);
++		result = This->AUMIDIBase::MIDIEvent(inStatus, inData1, inData2, inOffsetSampleFrame);
+ 	}
+ 	COMPONENT_CATCH
+ 	return result;
